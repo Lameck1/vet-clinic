@@ -12,14 +12,16 @@ CREATE TABLE species(
 );
 
 CREATE TABLE animals(
+  species_id INT,
+  owner_id INT,
   id INT GENERATED ALWAYS AS IDENTITY,
   name VARCHAR(20),
   date_of_birth DATE,
   escape_attempts INT,
   neutered BOOLEAN,
   weight_kg DECIMAL,
-  species_id INT REFERENCES species(id),
-  owner_id INT REFERENCES owners(id),
+  FOREIGN KEY (species_id) REFERENCES species (id),
+  FOREIGN KEY (owner_id) REFERENCES owners (id),
   PRIMARY KEY(id)
 );
 
@@ -32,16 +34,27 @@ CREATE TABLE vets(
 );
 
 CREATE TABLE specializations(
-  id INT GENERATED ALWAYS AS IDENTITY,
-  species_id INT REFERENCES species(id),
-  vet_id INT REFERENCES vets(id),
-  PRIMARY KEY(id)
+  species_id  INT,
+  vets_id     INT,
+  FOREIGN KEY (species_id) REFERENCES species (id),
+  FOREIGN KEY (vets_id) REFERENCES vets (id),
+  PRIMARY KEY (species_id, vets_id)
 );
 
 CREATE TABLE visits(
-  id INT GENERATED ALWAYS AS IDENTITY,
-  animal_id INT REFERENCES animals(id),
-  vet_id INT REFERENCES vets(id),
+  animal_id  INT,
+  vet_id     INT,
   date_of_visit DATE,
-  PRIMARY KEY(id)
+  id INT GENERATED ALWAYS AS IDENTITY,
+  FOREIGN KEY (animal_id) REFERENCES animals (id),
+  FOREIGN KEY (vet_id) REFERENCES vets (id),
+  PRIMARY KEY (id)
 );
+
+ALTER TABLE owners ADD COLUMN email VARCHAR(120);
+
+CREATE INDEX animal_id_idx ON visits (animal_id);
+
+CREATE INDEX vet_id_idx ON visits (vet_id);
+
+CREATE INDEX owners_email_idx ON owners (email);
