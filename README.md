@@ -41,7 +41,7 @@ The following are screenshot displaying the before and after results on analysin
 
 ![query_two_after](./assets/query_two_after.png)
 
-## Query THRE
+## Query THREE
 
 `explain analyze SELECT * FROM owners where email = 'owner_18327@mail.com';`
 
